@@ -1,246 +1,164 @@
 from flask import (
-    Flask,
-    render_template,
-    request,
-    redirect,
-    url_for
+    Flask, render_template, redirect,
+    url_for, flash,request
 )
 
 from flask_login import (
-    LoginManager,
-    login_user,
-    login_required,
-    logout_user,
-    current_user
+    LoginManager, login_user, logout_user,
+    login_required, current_user
 )
 
 from werkzeug.security import (
-    generate_password_hash,
-    check_password_hash
+    generate_password_hash, check_password_hash
 )
 
-from models import (
-    db,
-    User,
-    Company,
-    Placement,
-    Experience,
-    Question
+from forms import SignupForm, LoginForm, AdminLoginForm
+from models import db, User, Company
+
+from flask import Flask
+
+app = Flask(
+    __name__,
+    template_folder="templates",
+    static_folder="static"
 )
-
-
-app = Flask(__name__)
-
-
-
-
-app.config["SECRET_KEY"] = "placement-insights-secret-key"
-
-app.config["SQLALCHEMY_DATABASE_URI"] = (
-    "sqlite:///placement.db"
-)
-
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-
-
-
+app.config["SECRET_KEY"] = "DSAISTOUGHBUTIMTOUGHER"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///placement.db"
 
 db.init_app(app)
 
-
-
-
 login_manager = LoginManager()
-
 login_manager.init_app(app)
-
 login_manager.login_view = "login"
 
 
 @login_manager.user_loader
 def load_user(user_id):
-
-    return User.query.get(int(user_id))
-
-
+    return db.session.get(User, int(user_id))
 
 
 @app.route("/")
 def home():
-
-    return render_template(
-        "placement_stats.html"
-    )
+    return render_template("index.html")
 
 
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    form = SignupForm()
 
+    if form.validate_on_submit():
+        existing_user = User.query.filter(
+    (User.username == form.username.data) |
+    (User.usn == form.usn.data.strip().upper()) |
+    (User.email == form.email.data.strip().lower())
+).first()
 
-@app.route(
-    "/login",
-    methods=["GET", "POST"]
+        if existing_user:
+            flash("Username or email already exists.", "danger")
+        else:
+            user = User(
+    username=form.username.data,
+    usn=form.usn.data.strip().upper(),
+    email=form.email.data.strip().lower(),
+    password_hash=generate_password_hash(form.password.data),
+    role="student"
 )
+
+            db.session.add(user)
+            db.session.commit()
+
+            flash("Account created successfully. Please log in.", "success")
+            return redirect(url_for("login"))
+
+    return render_template("register.html", form=form)
+
+ 
+@app.route("/login", methods=["GET", "POST"])
 def login():
+    form = LoginForm()
 
-    if current_user.is_authenticated:
-
-        if current_user.role == "senior":
-            return redirect(
-                url_for("senior_dashboard")
-            )
-
-    if request.method == "POST":
-
-        email = request.form.get("email")
-
-        password = request.form.get("password")
-
+    if form.validate_on_submit():
         user = User.query.filter_by(
-            email=email
+            usn=form.usn.data.strip().upper()
         ).first()
 
         if user and check_password_hash(
-            user.password_hash,
-            password
+            user.password_hash, form.password.data
         ):
+            if user.role == "student":
+                login_user(user, remember=form.remember.data)
+                flash("Student login successful.", "success")
+                return redirect(url_for("placement_stats"))
 
-            login_user(user)
+            elif user.role == "senior":
+                login_user(user, remember=form.remember.data)
+                return redirect(url_for("senior_dashboard"))
 
-            if user.role == "senior":
+            elif user.role == "admin":
+                flash("Please use the admin login page.", "warning")
 
-                return redirect(
-                    url_for("senior_dashboard")
-                )
+            else:
+                flash("Your account role is not recognized.", "danger")
 
-            return "Admin dashboard coming soon"
+        else:
+            flash("Invalid USN or password.", "danger")
 
-        return render_template(
-            "login.html",
-            error="Invalid email or password"
-        )
-
-    return render_template("login.html")
-
-
-
-
-@app.route("/logout")
-@login_required
-def logout():
-
-    logout_user()
-
-    return redirect(
-        url_for("login")
-    )
-
+    return render_template("login.html", form=form)
 
 
 
 @app.route("/senior/dashboard")
 @login_required
 def senior_dashboard():
-
     if current_user.role != "senior":
+        return "Forbidden", 403
 
-        return "Unauthorized", 403
-
-    experiences = Experience.query.filter_by(
-        senior_id=current_user.id
-    ).all()
-
-    return render_template(
-        "senior/dashboard.html",
-        experiences=experiences
-    )
+    return render_template("senior/dashboard.html")
 
 
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    flash("You have been logged out.", "success")
+    return redirect(url_for("login"))
 
-@app.route("/placement-stats")
+@app.route("/placement")
 def placement_stats():
+    search = request.args.get("company", "").strip()
 
-    company_name = request.args.get(
-        "company",
-        ""
-    ).strip()
-
-    companies = []
-
-    placements = []
-
-    if company_name:
-
+    if search:
         companies = Company.query.filter(
-            Company.name.ilike(
-                f"%{company_name}%"
-            )
-        ).all()
-
-        if len(companies) == 1:
-
-            placements = Placement.query.filter_by(
-                company_id=companies[0].id
-            ).all()
+            Company.name.ilike(f"%{search}%")
+        ).order_by(Company.name).all()
+    else:
+        companies = Company.query.order_by(Company.name).all()
 
     return render_template(
-        "student/placement_stats.html",
-        companies=companies,
-        placements=placements,
-        company_name=company_name
+        "placement.html",
+        companies=companies
     )
 
 
+@app.route("/admin-login", methods=["GET", "POST"])
+def admin_login():
+    form = AdminLoginForm()
 
-@app.route("/company/<int:company_id>")
-def company_page(company_id):
+    if form.validate_on_submit():
+        user = User.query.filter_by(
+            username=form.username.data,
+            role="admin"
+        ).first()
 
-    company = Company.query.get_or_404(
-        company_id
-    )
+        if user and check_password_hash(
+            user.password_hash, form.password.data
+        ):
+            login_user(user)
+            return redirect(url_for("home"))
 
-    placements = Placement.query.filter_by(
-        company_id=company.id
-    ).all()
+        flash("Invalid admin credentials.", "danger")
 
-    experiences = Experience.query.filter_by(
-        company_id=company.id
-    ).all()
-
-    questions = Question.query.filter_by(
-        company_id=company.id
-    ).all()
-
-    # Group questions by category
-
-    grouped_questions = {}
-
-    for question in questions:
-
-        category = question.category
-
-        if category not in grouped_questions:
-
-            grouped_questions[category] = []
-
-        grouped_questions[category].append(
-            question
-        )
-
-    return render_template(
-        "student/company.html",
-        company=company,
-        placements=placements,
-        experiences=experiences,
-        grouped_questions=grouped_questions
-    )
-
-
-
-with app.app_context():
-
-    db.create_all()
-
-
+    return render_template("admin-login.html", form=form)
 
 if __name__ == "__main__":
-
     app.run(debug=True)
