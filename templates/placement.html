@@ -1,0 +1,86 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Placement Insights | PLACERA</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="home-page">
+
+    <header class="header">
+        <a href="{{ url_for('home') }}" class="logo-box">
+            <img src="{{ url_for('static', filename='logosdm.jpg') }}"
+                 alt="PLACERA Logo">
+        </a>
+
+        <h1 class="brand-title">PLACERA</h1>
+    </header>
+
+    <main class="home-container">
+
+        <section class="role-card">
+            <div class="role-header">
+                <span>PLACEMENT INSIGHTS</span>
+            </div>
+
+            <div class="role-content">
+                <h2>Explore Placement Opportunities</h2>
+
+                <p class="role-description">
+                    Search companies to explore placement packages,
+                    student placements and interview experiences.
+                </p>
+
+                <form method="GET"
+                      action="{{ url_for('placement_stats') }}">
+
+                    <input
+                        type="text"
+                        name="company"
+                        placeholder="Search company (e.g. Visa, Dell)"
+                        value="{{ request.args.get('company', '') }}"
+                        aria-label="Search company">
+
+                    <button type="submit">Search</button>
+                </form>
+
+                {% if companies is defined %}
+                    {% if companies %}
+                        <h3>Companies</h3>
+
+                        {% for company in companies %}
+                            <article>
+                                <h3>{{ company.name }}</h3>
+
+                                <p>
+                                    <a href="{{ url_for('company_details', company_id=company.id) }}">
+                                        View placement details →
+                                    </a>
+                                </p>
+                            </article>
+                        {% endfor %}
+                    {% else %}
+                        <p>No companies found. Try another search.</p>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </section>
+
+        <p>
+            <a href="{{ url_for('home') }}">← Back to Home</a>
+        </p>
+
+    </main>
+
+</body>
+</html>
