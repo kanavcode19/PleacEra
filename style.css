@@ -1,0 +1,1181 @@
+/* =================================================
+   RESET
+================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* =================================================
+   VARIABLES
+================================================= */
+
+:root {
+
+    --primary: #4f46e5;
+    --primary-dark: #3730a3;
+
+    --accent: #6366f1;
+
+    --background: #eef2ff;
+
+    --card: rgba(255, 255, 255, 0.88);
+
+    --text: #111827;
+
+    --muted: #64748b;
+
+    --border: rgba(255, 255, 255, 0.55);
+
+    --input: rgba(248, 250, 252, 0.9);
+
+    --shadow:
+        0 25px 70px rgba(15, 23, 42, 0.15);
+
+}
+
+
+/* =================================================
+   BODY
+================================================= */
+
+body {
+
+    min-height: 100vh;
+
+    font-family:
+        "Inter",
+        Arial,
+        sans-serif;
+
+    color: var(--text);
+
+    background:
+
+        linear-gradient(
+            135deg,
+            rgba(15, 23, 42, 0.60),
+            rgba(30, 41, 59, 0.35)
+        ),
+
+        url("full\ img.jpg");
+
+    background-size: cover;
+
+    background-position: center;
+
+    background-attachment: fixed;
+
+    transition:
+        background 0.4s,
+        color 0.4s;
+
+}
+
+
+/* =================================================
+   HEADER
+================================================= */
+
+.header {
+    height: 72px;
+    width: 100%;
+
+    background: rgba(255, 255, 255, 0.96);
+
+    border-bottom: 1px solid #e2e8f0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: relative;
+    z-index: 10;
+
+    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.08);
+}
+
+
+/* =================================================
+   LOGO
+================================================= */
+
+.logo-box {
+
+    position: absolute;
+
+    left: 42%;
+
+    display: flex;
+
+    align-items: center;
+
+}
+
+
+.logo-box img {
+
+    width: 44px;
+
+    height: 44px;
+
+    object-fit: contain;
+
+    transition: 0.3s;
+
+}
+
+
+/* .logo-box img:hover {
+
+    transform:
+        scale(1.08);
+
+} */
+
+
+/* =================================================
+   HEADER TITLE
+================================================= */
+
+.brand-title {
+
+    font-family:
+        "Poppins",
+        sans-serif;
+
+    font-size: 24px;
+
+    font-weight: 800;
+
+    letter-spacing: 5px;
+
+    color: #111827;
+
+}
+
+
+/* =================================================
+   MAINTENANCE BAR
+================================================= */
+
+.maintenance-bar {
+
+    width: 100%;
+
+    height: 27px;
+
+    overflow: hidden;
+
+    background:
+        rgba(15, 23, 42, 0.92);
+
+    border-bottom:
+        1px solid rgba(255,255,255,0.15);
+
+    display: flex;
+
+    align-items: center;
+
+    white-space: nowrap;
+
+}
+
+
+.maintenance-track {
+
+    display: flex;
+
+    width: max-content;
+
+    animation:
+        maintenanceScroll
+        18s
+        linear
+        infinite;
+
+}
+
+
+.maintenance-track span {
+
+    color: #f8fafc;
+
+    font-family:
+        "Poppins",
+        sans-serif;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    letter-spacing: 3px;
+
+    padding-right: 90px;
+
+}
+
+
+/* scrolling */
+
+@keyframes maintenanceScroll {
+
+    from {
+        transform:
+            translateX(0);
+    }
+
+    to {
+        transform:
+            translateX(-50%);
+    }
+
+}
+
+
+/* =================================================
+   THEME SWITCH
+================================================= */
+
+.theme-container {
+
+    position: fixed;
+
+    right: 5%;
+
+    top: 108px;
+
+    z-index: 20;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    color: white;
+
+    font-size: 14px;
+
+    padding: 7px 10px;
+
+    background:
+        rgba(15, 23, 42, 0.45);
+
+    border:
+        1px solid
+        rgba(255,255,255,0.2);
+
+    border-radius: 20px;
+
+    backdrop-filter:
+        blur(10px);
+
+}
+
+
+.theme-symbol {
+
+    font-size: 13px;
+
+}
+
+
+/* switch */
+
+.theme-switch {
+
+    position: relative;
+
+    width: 40px;
+
+    height: 21px;
+
+}
+
+
+.theme-switch input {
+
+    display: none;
+
+}
+
+
+.slider {
+
+    position: absolute;
+
+    inset: 0;
+
+    background: rgba(255,255,255,0.3);
+
+    border-radius: 20px;
+
+    cursor: pointer;
+
+}
+
+
+.slider::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 15px;
+
+    height: 15px;
+
+    left: 3px;
+
+    top: 3px;
+
+    background: white;
+
+    border-radius: 50%;
+
+    transition: 0.3s;
+
+}
+
+
+.theme-switch input:checked
++ .slider {
+
+    background:
+        var(--accent);
+
+}
+
+
+.theme-switch input:checked
++ .slider::before {
+
+    transform:
+        translateX(19px);
+
+}
+
+
+/* =================================================
+   HOME
+================================================= */
+
+.home-container {
+
+    min-height:
+        calc(100vh - 99px);
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding:
+        55px
+        20px
+        35px;
+
+}
+
+
+/* =================================================
+   ROLE CARD
+================================================= */
+
+.role-card {
+    width: 510px;
+    max-width: 95%;
+
+    background: #ffffff;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 24px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 20px 50px rgba(15, 23, 42, 0.15);
+
+    transition: 0.3s;
+}
+
+
+.role-card:hover {
+
+    transform:
+        translateY(-4px);
+
+}
+
+
+/* =================================================
+   ROLE HEADER
+================================================= */
+
+.role-header {
+
+    height: 58px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-bottom:
+        1px solid
+        rgba(148,163,184,0.2);
+
+}
+
+
+.role-header span {
+
+    font-family:
+        "Poppins",
+        sans-serif;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    letter-spacing: 1.5px;
+
+    color:
+        var(--muted);
+
+}
+
+
+/* =================================================
+   ROLE CONTENT
+================================================= */
+
+.role-content {
+
+    padding: 32px;
+
+}
+
+
+.role-description {
+
+    text-align: center;
+
+    color: var(--muted);
+
+    font-size: 12px;
+
+    margin-bottom: 23px;
+
+}
+
+
+/* =================================================
+   ROLE OPTIONS
+================================================= */
+
+.role-options {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 13px;
+
+}
+
+
+.role-option {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 17px;
+
+    border:
+        1px solid
+        rgba(148,163,184,0.25);
+
+    border-radius: 14px;
+
+    text-decoration: none;
+
+    color: var(--text);
+
+    background:
+        rgba(255,255,255,0.45);
+
+    transition:
+        0.25s;
+
+}
+
+
+.role-option:hover {
+
+    background:
+        rgba(255,255,255,0.85);
+
+    border-color:
+        rgba(99,102,241,0.35);
+
+    transform:
+        translateX(4px);
+
+    box-shadow:
+        0 8px 25px
+        rgba(79,70,229,0.08);
+
+}
+
+
+/* icon */
+
+.role-icon {
+
+    width: 45px;
+
+    height: 45px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background:
+        #eef2ff;
+
+    font-size: 19px;
+
+}
+
+
+.admin-icon {
+
+    background:
+        #f1f5f9;
+
+}
+
+
+/* role information */
+
+.role-info {
+
+    flex: 1;
+
+}
+
+
+.role-info h2 {
+
+    font-family:
+        "Poppins",
+        sans-serif;
+
+    font-size: 14px;
+
+    margin-bottom: 4px;
+
+}
+
+
+.role-info p {
+
+    font-size: 11px;
+
+    color: var(--muted);
+
+}
+
+
+.role-arrow {
+
+    color:
+        var(--primary);
+
+    font-size: 21px;
+
+}
+
+
+/* =================================================
+   INSIGHTS
+================================================= */
+
+.insights-container {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+
+    text-align: right;
+
+}
+
+
+.insights-text h2 {
+
+    font-family:
+        "Poppins",
+        sans-serif;
+
+    font-size: 20px;
+
+    margin-bottom: 4px;
+
+    color: white;
+
+}
+
+
+.insights-text p {
+
+    font-size: 11px;
+
+    color:
+        rgba(255,255,255,0.75);
+
+}
+
+
+.insights-button {
+
+    width: 48px;
+
+    height: 38px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        var(--primary);
+
+    color: white;
+
+    text-decoration: none;
+
+    border-radius: 9px;
+
+    font-size: 22px;
+
+    box-shadow:
+        0 8px 20px
+        rgba(79,70,229,0.35);
+
+    transition:
+        0.25s;
+
+}
+
+
+.insights-button:hover {
+
+    background:
+        var(--primary-dark);
+
+    transform:
+        translateX(5px);
+
+}
+
+
+/* =================================================
+   AUTH PAGE
+================================================= */
+
+.auth-page {
+
+    min-height:
+        calc(100vh - 72px);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding:
+        50px 20px;
+
+}
+
+
+/* =================================================
+   AUTH CARD
+================================================= */
+
+.auth-card {
+    width: 420px;
+    max-width: 95%;
+
+    padding: 35px 45px;
+
+    background: #ffffff;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 24px;
+
+    box-shadow:
+        0 20px 50px rgba(15, 23, 42, 0.15);
+}
+
+
+/* =================================================
+   AUTH HEADING
+================================================= */
+
+.auth-heading {
+
+    text-align: center;
+
+    margin-bottom: 27px;
+
+}
+
+
+.auth-heading h2 {
+
+    font-family:
+        "Poppins",
+        sans-serif;
+
+    font-size: 24px;
+
+    margin:
+        12px 0 7px;
+
+}
+
+
+.auth-heading p {
+
+    color:
+        var(--muted);
+
+    font-size: 12px;
+
+}
+
+
+/* =================================================
+   BADGES
+================================================= */
+
+.auth-badge,
+.admin-badge {
+
+    display: inline-block;
+
+    padding:
+        6px 14px;
+
+    border-radius:
+        20px;
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.5px;
+
+}
+
+
+.auth-badge {
+
+    background:
+        #eef2ff;
+
+    color:
+        var(--primary);
+
+}
+
+
+.admin-badge {
+
+    background:
+        #f1f5f9;
+
+    color:
+        #475569;
+
+}
+
+
+/* =================================================
+   INPUT
+================================================= */
+
+.input-group {
+
+    margin-bottom: 16px;
+
+}
+
+
+.input-group label {
+
+    display: block;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    margin-bottom: 7px;
+
+}
+
+
+.input-group input {
+
+    width: 100%;
+
+    height: 42px;
+
+    padding:
+        0 12px;
+
+    border:
+        1px solid
+        rgba(148,163,184,0.35);
+
+    border-radius: 9px;
+
+    outline: none;
+
+    font-family:
+        "Inter",
+        sans-serif;
+
+    font-size: 12px;
+
+    background:
+        var(--input);
+
+    transition:
+        0.2s;
+
+}
+
+
+.input-group input:focus {
+
+    border-color:
+        var(--primary);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(79,70,229,0.1);
+
+}
+
+
+/* =================================================
+   BUTTON
+================================================= */
+
+.auth-btn {
+
+    width: 100%;
+
+    height: 43px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #4f46e5,
+            #6366f1
+        );
+
+    color: white;
+
+    font-family:
+        "Poppins",
+        sans-serif;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    margin-top: 4px;
+
+    transition:
+        0.25s;
+
+}
+
+
+.auth-btn:hover {
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 10px 25px
+        rgba(79,70,229,0.3);
+
+}
+
+
+/* =================================================
+   SWITCH TEXT
+================================================= */
+
+.switch-text {
+
+    text-align: center;
+
+    margin-top: 19px;
+
+    font-size: 11px;
+
+    color:
+        var(--muted);
+
+}
+
+
+.switch-text a {
+
+    color:
+        var(--primary);
+
+    text-decoration: none;
+
+    font-weight: 600;
+
+}
+
+
+.switch-text a:hover {
+
+    text-decoration:
+        underline;
+
+}
+
+
+/* =================================================
+   BACK
+================================================= */
+
+.back-link {
+
+    display: block;
+
+    text-align: center;
+
+    margin-top: 20px;
+
+    color:
+        var(--muted);
+
+    text-decoration: none;
+
+    font-size: 11px;
+
+}
+
+
+.back-link:hover {
+
+    color:
+        var(--primary);
+
+}
+
+
+/* =================================================
+   DARK MODE
+================================================= */
+
+body.dark {
+
+    --background: #080b16;
+
+    --card:
+        rgba(17, 24, 39, 0.82);
+
+    --text: #f8fafc;
+
+    --muted: #94a3b8;
+
+    --border:
+        rgba(148,163,184,0.15);
+
+    --input:
+        rgba(15,23,42,0.8);
+
+    background:
+
+        linear-gradient(
+            135deg,
+            rgba(2,6,23,0.82),
+            rgba(30,27,75,0.65)
+        ),
+
+        url("assets/background.jpg");
+
+    background-size: cover;
+
+    background-position: center;
+
+    background-attachment: fixed;
+
+}
+
+
+body.dark .header {
+
+    background:
+        rgba(15,23,42,0.9);
+
+}
+
+
+body.dark .brand-title {
+
+    color: white;
+
+}
+
+
+body.dark .role-option {
+
+    background:
+        rgba(15,23,42,0.35);
+
+}
+
+
+body.dark .role-option:hover {
+
+    background:
+        rgba(30,41,59,0.7);
+
+}
+
+
+body.dark .input-group input {
+
+    color: white;
+
+}
+
+
+body.dark .auth-badge {
+
+    background:
+        rgba(79,70,229,0.18);
+
+}
+
+
+/* =================================================
+   RESPONSIVE
+================================================= */
+
+@media (max-width: 600px) {
+
+    .logo-box {
+
+        left: 20px;
+
+    }
+
+
+    .logo-box img {
+
+        width: 38px;
+
+        height: 38px;
+
+    }
+
+
+    .brand-title {
+    font-family: "Poppins", sans-serif;
+
+    font-size: 24px;
+    font-weight: 700;
+
+    letter-spacing: 4px;
+
+    color: #172554;
+}
+
+
+    .theme-container {
+
+        right: 15px;
+
+        top: 106px;
+
+    }
+
+
+    .role-card {
+
+        width: 100%;
+
+    }
+
+
+    .role-content {
+
+        padding: 25px;
+
+    }
+
+
+    .insights-container {
+
+        text-align: center;
+
+    }
+
+
+    .insights-text h2 {
+
+        font-size: 17px;
+
+    }
+
+
+    .auth-card {
+
+        padding:
+            30px 25px;
+
+    }
+
+}
